@@ -6,7 +6,7 @@
   "private": true,
   "dependencies": {},
   "pebble": {
-    "displayName": "nume-rebble",
+    "displayName": "Nume-rebble",
     "uuid": "4248c4a4-38ce-4456-ba22-f69ca32a9118",
     "sdkVersion": "3",
     "enableMultiJS": true,
@@ -17,13 +17,81 @@
       "diorite"
     ],
     "watchapp": {
-      "watchface": false
+      "watchface": true
     },
     "messageKeys": [
       "dummy"
     ],
     "resources": {
-      "media": []
+      "media": [
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_0",
+          "file": "images/digit0.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_1",
+          "file": "images/digit1.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_2",
+          "file": "images/digit2.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_3",
+          "file": "images/digit3.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_4",
+          "file": "images/digit4.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_5",
+          "file": "images/digit5.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_6",
+          "file": "images/digit6.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_7",
+          "file": "images/digit7.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_8",
+          "file": "images/digit8.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_DIGIT_9",
+          "file": "images/digit9.png"
+        },
+        {
+          "menuIcon": true,
+          "type": "bitmap",
+          "targetPlatforms": null,
+          "file": "images/menu_icon.png",
+          "name": "IMAGE_MENU_ICON"
+        }
+      ]
     }
   }
 }

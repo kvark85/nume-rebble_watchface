@@ -1,2 +1,6 @@
 # Integrated Development Environments
-.idea
+.idea/
+
+build/
+
+.lock-waf_linux2_build
