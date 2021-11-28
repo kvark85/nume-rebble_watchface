@@ -13,23 +13,14 @@ static int minute_symbol_1 = 0;
 static char digit_width = 69;
 static char digit_height = 81;
 
-static GBitmap *s_digit_0_image;
-static GBitmap *s_digit_1_image;
-static GBitmap *s_digit_2_image;
-static GBitmap *s_digit_3_image;
-static GBitmap *s_digit_4_image;
-static GBitmap *s_digit_5_image;
-static GBitmap *s_digit_6_image;
-static GBitmap *s_digit_7_image;
-static GBitmap *s_digit_8_image;
-static GBitmap *s_digit_9_image;
-
 static GBitmap *ara[10];
+static GBitmap *s_bluetooth_icon_bitmap;
 
 static BitmapLayer *s_layer0;
 static BitmapLayer *s_layer1;
 static BitmapLayer *s_layer2;
 static BitmapLayer *s_layer3;
+static BitmapLayer *s_bluetooth_icon_layer;
 
 static void prv_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
@@ -44,41 +35,47 @@ static void prv_window_load(Window *window) {
   ara[7] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DIGIT_7);
   ara[8] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DIGIT_8);
   ara[9] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DIGIT_9);
+  s_bluetooth_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BT_ICON);
 
   s_layer0 = bitmap_layer_create(GRect(0, 0, digit_width, digit_height));
   s_layer1 = bitmap_layer_create(GRect(digit_width + 6,0, digit_width, digit_height));
-
   s_layer2 = bitmap_layer_create(GRect(0, digit_height + 6, digit_width, digit_height));
   s_layer3 = bitmap_layer_create(GRect(digit_width + 6, digit_height + 6, digit_width, digit_height));
+  s_bluetooth_icon_layer = bitmap_layer_create(GRect(64, 152, 16, 16));
 
   layer_add_child(window_layer, bitmap_layer_get_layer(s_layer0));
   layer_add_child(window_layer, bitmap_layer_get_layer(s_layer1));
   layer_add_child(window_layer, bitmap_layer_get_layer(s_layer2));
   layer_add_child(window_layer, bitmap_layer_get_layer(s_layer3));
+  layer_add_child(window_layer, bitmap_layer_get_layer(s_bluetooth_icon_layer));
+  bitmap_layer_set_bitmap(s_bluetooth_icon_layer, s_bluetooth_icon_bitmap);
 }
 
 static void prv_window_unload(Window *window) {
   // destroy the image layers
-  gbitmap_destroy(s_digit_0_image);
-  gbitmap_destroy(s_digit_1_image);
-  gbitmap_destroy(s_digit_2_image);
-  gbitmap_destroy(s_digit_3_image);
-  gbitmap_destroy(s_digit_4_image);
-  gbitmap_destroy(s_digit_5_image);
-  gbitmap_destroy(s_digit_6_image);
-  gbitmap_destroy(s_digit_7_image);
-  gbitmap_destroy(s_digit_8_image);
-  gbitmap_destroy(s_digit_9_image);
+  gbitmap_destroy(ara[0]);
+  gbitmap_destroy(ara[1]);
+  gbitmap_destroy(ara[2]);
+  gbitmap_destroy(ara[3]);
+  gbitmap_destroy(ara[4]);
+  gbitmap_destroy(ara[5]);
+  gbitmap_destroy(ara[6]);
+  gbitmap_destroy(ara[7]);
+  gbitmap_destroy(ara[8]);
+  gbitmap_destroy(ara[9]);
+  gbitmap_destroy(s_bluetooth_icon_bitmap);
 
   layer_remove_from_parent(bitmap_layer_get_layer(s_layer0));
   layer_remove_from_parent(bitmap_layer_get_layer(s_layer1));
   layer_remove_from_parent(bitmap_layer_get_layer(s_layer2));
   layer_remove_from_parent(bitmap_layer_get_layer(s_layer3));
+  layer_remove_from_parent(bitmap_layer_get_layer(s_bluetooth_icon_layer));
 
   bitmap_layer_destroy(s_layer0);
   bitmap_layer_destroy(s_layer1);
   bitmap_layer_destroy(s_layer2);
   bitmap_layer_destroy(s_layer3);
+  bitmap_layer_destroy(s_bluetooth_icon_layer);
 }
 
 static void update_time() {
@@ -110,6 +107,16 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   update_time();
 }
 
+static void bluetooth_callback(bool connected) {
+  // Show icon if disconnected
+  layer_set_hidden(bitmap_layer_get_layer(s_bluetooth_icon_layer), connected);
+
+  if(!connected) {
+    // Issue a vibrating alert
+    vibes_double_pulse();
+  }
+}
+
 static void prv_init(void) {
   s_window = window_create();
   window_set_background_color(s_window, GColorBlack);
@@ -124,6 +131,14 @@ static void prv_init(void) {
 
   // Register with TickTimerService
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+
+  // Register for Bluetooth connection updates
+  connection_service_subscribe((ConnectionHandlers) {
+      .pebble_app_connection_handler = bluetooth_callback
+  });
+
+  // Show the correct state of the BT connection from the start
+  bluetooth_callback(connection_service_peek_pebble_app_connection());
 }
 
 static void prv_deinit(void) {

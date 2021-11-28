@@ -1,7 +1,7 @@
 {
   "name": "nume-rebble",
   "author": "MakeAwesomeHappen",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "keywords": ["pebble-app"],
   "private": true,
   "dependencies": {},
@@ -83,6 +83,12 @@
           "type": "bitmap",
           "name": "IMAGE_DIGIT_9",
           "file": "images/digit9.png"
+        },
+        {
+          "targetPlatforms": null,
+          "type": "bitmap",
+          "name": "IMAGE_BT_ICON",
+          "file": "images/bt-icon.png"
         },
         {
           "menuIcon": true,
